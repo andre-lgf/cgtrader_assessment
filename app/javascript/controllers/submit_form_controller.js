@@ -7,7 +7,7 @@ export default class extends Controller {
     clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
       this._submit();
-    }, 500);
+    }, 300);
   }
 
   _submit() {
