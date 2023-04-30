@@ -6,11 +6,6 @@ ENV RAILS_ROOT /var/www/cgtrader
 RUN mkdir -p $RAILS_ROOT
 WORKDIR $RAILS_ROOT
 
-# Setting env up
-ENV RAILS_ENV='development'
-ENV RACK_ENV='development'
-# ENV WEB_CONCURRENCY=2
-
 FROM base as build
 # Adding gems
 COPY Gemfile Gemfile
@@ -19,6 +14,10 @@ RUN bundle config set force_ruby_platform true
 RUN bundle install --jobs 20 --retry 5 --without development test
 
 FROM build
+# Setting env up
+ENV RAILS_ENV='production'
+ENV RACK_ENV='production'
+# ENV WEB_CONCURRENCY=2
 # Adding project files
 COPY . .
 COPY bin/docker/entrypoint.sh /usr/bin/

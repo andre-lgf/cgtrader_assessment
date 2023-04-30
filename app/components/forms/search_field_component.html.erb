@@ -1,0 +1,44 @@
+<div class="w-full">
+  <%= form_with(
+    url: @url,
+    method: :get,
+    class: 'mb-5 grid gap-6 md:grid-cols-2 lg:grid-cols-4',
+    data: {
+      controller: "submit-form",
+      submit_form_target: "form",
+      turbo_frame: @turbo_trame
+    }
+  ) do |f| %>
+    <%= render Forms::InputFieldComponent.new(
+      input_name: :query,
+      label: @label,
+      value: params[:query],
+      placeholder: @placeholder,
+      data: {
+        action: "input->submit-form#submit",
+        submit_form_target: 'search'
+      },
+      col_span: 2
+    ) %>
+    <%= render Forms::InputFieldComponent.new(
+      input_name: :operator,
+      input_type: :select,
+      input_options: %i[and or],
+      value: params[:operator] || :and,
+      data: {
+        action: 'input->submit-form#submit',
+        submit_form_target: 'search'
+      }
+    ) %>
+    <%= render Forms::InputFieldComponent.new(
+      input_name: :match_phrase,
+      input_type: :select,
+      input_options: %i[yes no],
+      value: params[:match_phrase] || :no,
+      data: {
+        action: 'input->submit-form#submit',
+        submit_form_target: 'search'
+      }
+    ) %>
+  <% end %>
+</div>

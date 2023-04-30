@@ -11,12 +11,15 @@ services:
       - "redis:/data"
 
   assignment:
-    container_name: api
+    container_name: core
     restart: unless-stopped
     depends_on:
-      - redis
-      - db
-      - elasticsearch
+      redis:
+        condition: service_started
+      db:
+        condition: service_started
+      elasticsearch:
+        condition: service_healthy
     build:
       context: .
       dockerfile: ./docker/app/Dockerfile
@@ -26,6 +29,7 @@ services:
       - 3000:3000
     environment:
       - DATABASE_HOST=db
+      - REDIS_URL=redis://redis:6379/1
       - ELASTICSEARCH_URL=http://elasticsearch:9200
 
   db:
@@ -61,6 +65,15 @@ services:
       xpack.security.enabled: false
     volumes:
       - ./esdata:/usr/share/elasticsearch/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -I http://localhost:9200 | grep -q 'HTTP/1.1 200 OK'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
       
   # kibana:
   #   restart: unless-stopped
