@@ -30,5 +30,11 @@ This solution was built using Ruby 3.2.2 and Rails 7.0.4.3. It has a docker-comp
 First, ensure you have Docker installed and running.
 
 ### Build and Start containers
-To build and start containers up, navigate to the application root inside terminal and run ```docker-compose up --build```. It will download and configure the Ruby base image, copy the application to the image, download Elasticsearch, Redis and PostgreSQL.
+To build and start containers up, navigate to the application root inside terminal and run ```docker-compose up --build```. It will download and configure the Ruby base image, copy the application to the image, download Elasticsearch, Redis, Nginx and PostgreSQL.
 
+### Setup environment
+After building and starting the containers, open a new terminal session and run the following command to create the database, apply the migrations, populate and reindex the records in Elasticsearch:
+```docker-compose run --rm assignment rails db:create db:schema:load db:migrate db:seed```
+
+### Accessing the application
+Since we are using Nginx to serve the application, once the containers are running, simply go to [localhost](http://localhost) without passing any port to access it.
