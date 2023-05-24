@@ -15,15 +15,15 @@ RUN bundle install --jobs 20 --retry 5 --without development test
 
 FROM build
 # Setting env up
-ENV RAILS_ENV='production'
-ENV RACK_ENV='production'
+ENV RAILS_ENV='development'
+ENV RACK_ENV='development'
 # ENV WEB_CONCURRENCY=2
 # Adding project files
 COPY . .
 COPY bin/docker/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
-RUN RAILS_ENV=production rails assets:clobber assets:clean assets:precompile
+RUN rails assets:clobber assets:clean assets:precompile
 EXPOSE 3000
 
 # Start the main process.
